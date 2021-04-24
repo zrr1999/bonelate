@@ -59,7 +59,6 @@ class Renderer(object):
                 output += value
             else:
                 output += self.render_block(flag, value)
-
         return output
 
 
