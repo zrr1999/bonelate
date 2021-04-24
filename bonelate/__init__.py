@@ -5,3 +5,4 @@
 # @File : __init__.py.py
 # @desc : 本代码未经授权禁止商用
 from .renderer import render, Renderer
+from .tokenizer import tokenize, Tokenizer

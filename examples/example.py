@@ -11,10 +11,10 @@ test_string = [
         "{{person}} is awesome.",
         "{{#persons}} awesome {{/persons}}",
         "{{#persons}}{{name}} is awesome.{{/persons}}",
-        "{{^undefined}} undefined{{/undefined}}",
-        "{{^not_person}} not_person{{/not_person}}",
-        "{{^persons}} error{{/persons}}",
-        "{{^undefined}} undefined {{person}} {{/undefined}}",
+        "{{!#undefined}} undefined{{/undefined}}",
+        "{{!#not_person}} not_person{{/not_person}}",
+        "{{!#persons}} error{{/persons}}",
+        "{{!#undefined}} undefined {{person}} {{/undefined}}",
         """
         {{#persons}}{{name}} is awesome.{{/persons}}
         {{person}} is beautiful.
