@@ -2,7 +2,7 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Bonelate 是一个基于pyparsing针对LaTeX的 [mustache模版语言](http://mustache.github.io/) 的实现，与chevron相比，实现更为简短。
+Bonelate 是一个基于 pyparsing 针对 LaTeX 的 [mustache模版语言](http://mustache.github.io/) 的实现，与 chevron 相比，实现更为简短。
 
 ## 背景
 
@@ -21,14 +21,7 @@ $ pip install .
 
 ## 使用说明
 
-
-## 示例
-
-## 特色功能
-
-## bonelate todo
-变量替换{{}}
-遍历{{#}}{{/}}
+### 示例
 
 ## 更新日志
 
