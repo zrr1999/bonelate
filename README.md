@@ -16,7 +16,7 @@ Bonelate 是一个基于 pyparsing 针对 LaTeX 的 [mustache模版语言](http:
 建议使用pip安装本库。
 
 ```sh
-$ pip install .
+$ pip install bonelate
 ```
 
 ## 使用说明
