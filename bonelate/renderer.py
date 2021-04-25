@@ -19,9 +19,9 @@ class Renderer(object):
 
     def render_block(self, flag, value):
         scope = self.scopes[-1]
-        if flag == "v":
+        if flag == "v" or flag == "lv":
             if value == ".":
-                return str(scope)
+                return str(scope) if flag == "v" else "{" + str(scope) + "}"
             else:
                 values = value.split(".")
                 for v in values:
@@ -29,7 +29,7 @@ class Renderer(object):
                         scope = scope[v]
                     else:
                         return ""
-                return str(scope)
+                return str(scope) if flag == "v" else "{" + str(scope) + "}"
         elif flag == "#":
             output = ""
             name, contents = value[0], value[1:]

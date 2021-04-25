@@ -9,7 +9,9 @@ from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding='UTF-8') as fh:
     long_description = fh.read()
-extras = {}
+extras = {
+    "test": ["pytest"]
+}
 setup(
     name="Bonelate",
     version=__version__,

@@ -8,9 +8,12 @@ variable = pp.Regex(r"[._A-Za-z0-9\u4e00-\u9fa5]+")  # 包含数字、字母、�
 tag = (left + variable + right).addParseAction(
     lambda tokens: [["v", tokens[0]]]
 )
+bracket_tag = (pp.Suppress("{{{") + variable + pp.Suppress("}}}")).addParseAction(
+    lambda tokens: [["lv", tokens[0]]]
+)
 open_tag = left + pp.oneOf(["#", "!#"]) + variable + right
 close_tag = left + "/" + variable + right
-literal = (pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]}")).addParseAction(
+literal = (pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]*}")).addParseAction(
     lambda tokens: [["l", tokens[0]]]
 )
 block = (open_tag + parser + close_tag.suppress()).addParseAction(
@@ -29,7 +32,7 @@ def render(template: Union[str, list], data: dict) -> str:
             output += value
         else:
             scope = scopes[-1]
-            if flag == "v":
+            if flag == "v" or flag == "lv":
                 if value == ".":
                     output += str(scope)
                 else:
@@ -38,6 +41,8 @@ def render(template: Union[str, list], data: dict) -> str:
                         if v in scope:
                             scope = scope[v]
                     output += str(scope)
+                if flag == "lv":
+                    output = "{" + output + "}"
             elif flag == "#":
                 name, contents = value[0], value[1:]
                 if name in scope:

@@ -15,15 +15,18 @@ class Tokenizer(object):
     tag = (left + variable + right).addParseAction(
         lambda tokens: [["v", tokens[0]]]
     )
-    open_tag = left + pp.oneOf(["#", "!#"]) + variable + right
+    bracket_tag = (pp.Suppress("{{{") + variable + pp.Suppress("}}}")).addParseAction(
+        lambda tokens: [["lv", tokens[0]]]
+    )
+    open_tag = left + pp.oneOf(["#", "^", "!#"]) + variable + right
     close_tag = left + "/" + variable + right
-    literal = (pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]}")).addParseAction(
+    literal = (pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]*}")).addParseAction(
         lambda tokens: [["l", tokens[0]]]
     )
     block = (open_tag + parser + close_tag.suppress()).addParseAction(
         lambda tokens: [[tokens[0], tokens[1:]]]
     )
-    parser <<= (block | tag | literal)[...].leaveWhitespace()
+    parser <<= (block | bracket_tag | tag | literal)[...].leaveWhitespace()
     parser = parser.parseString
 
     def __call__(self, template: str) -> list:
