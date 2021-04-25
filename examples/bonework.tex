@@ -1,0 +1,482 @@
+%!TEX program = xelatex
+\documentclass[cn,hazy,blue,14pt,normal]{elegantnote}
+
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tkz-fct}
+\usepackage{tkz-euclide}% 绘制线段命令(此处仅标注尺寸)
+\usepackage{subfig}
+\usepackage{overpic}
+
+\usetikzlibrary{shadows}
+\usetikzlibrary{intersections,decorations.text}
+\usetikzlibrary{dsp,chains}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\z}{\mathpzc{z}}
+\newcommand{\sgn}{\text{sgn}}
+\usetikzlibrary{
+    shapes.geometric,   %几何形状
+    calc,               %计算
+    positioning         %用于定位
+}
+\usetikzlibrary{arrows,arrows.meta}
+\tikzset{
+    every picture/.style={
+        >=latex,
+        node distance=5mm and 5mm
+        %有无and的区别见手册positioning部分
+}}
+\input{main.tikzstyles}
+\newtheorem{train}{实验}
+
+\begin{document}
+\includepdf{cover.pdf}
+
+\section{实验配置}
+\begin{itemize}
+    \item 程序测试系统：Windows 10
+    \item 程序运行环境：Python3.7
+    \item Python库（标准库未列出）：numpy, sklearn
+    \item 报告编写环境：Bone\TeX{}, \TeX{} Live 2020
+    \item 开发工具：PyCharm, VSCode
+\end{itemize}
+
+\section{数据集介绍}
+Iris 数据集是模式识别中最著名的数据集之一。Iris 数据集包含 3 个
+类，每个类有 50 个实例，其中每一类都是指一种鸢尾属植物。有一类是
+与另外两类是线性可分的，而另外两类之间是线性不可分的。
+
+Iris 数据集是非常经典的多分类数据集，其参数如表\ref{tab:3078999826376}
+
+\begin{table}[htbp]
+    \centering
+    \caption{iris数据集参数}
+    \label{tab:3078999826376}
+    \begin{tabular}{|c|c|}
+        \hline
+        类别数     & 3   \\
+        \hline
+        每类样本数 & 50  \\
+        \hline
+        样本总数   & 150 \\
+        \hline
+        维度       & 4   \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{算法原理与实现}
+\subsection{贝叶斯分类}
+\subsubsection{算法原理}
+贝叶斯分类的核心原理是贝叶斯定理，即
+\begin{equation}
+    P(A|B) = \frac{P(B|A)P(A)}{P(B)}
+\end{equation}
+
+首先假设有$N$种可能的分类类别，
+分别为$\{c_1,c_2, \cdot ,c_N\}$，这时候对于样本$x$，
+利用贝叶斯
+\begin{equation}
+    P(c|x) = \frac{P(x|c)P(c)}{P(x)}
+\end{equation}
+找到最大的$P(c|x)$作为样本$x$的最终分类，即
+\begin{equation}
+    c^* = \arg\max_c\frac{P(x|c)P(c)}{P(x)}
+\end{equation}
+$P(c)$很容易就可以得到，
+令$D_c$表示训练集$D$中第$c$类样本组成的集合，
+若有充足的独立同分布样本，
+则可以很容易估计出$P(c)$，即
+\begin{equation}
+    P(c) = \frac{ |D_c| }{D}
+\end{equation}
+不难发现，基于贝叶斯公式，
+主要是$P(x|c)$比较难以求解，
+一般估计类条件概率主要使用极大似然估计法，
+但因为这里是所有属性上的联合概率，
+难以运用最大似然估计法直接估计得到。
+为了避开这个障碍，
+朴素贝叶斯分类器运用了“属性条件独立性假设”：
+对已知类别，假设所有属性相互独立。
+\begin{equation}
+    P(c) = \frac{ |D_c| }{|D|}
+\end{equation}
+
+基于上述假设，贝叶斯分类公式可以重写为：
+\begin{equation}
+    P(c|x) = \frac{P(c)}{P(x)}\prod_{i = 1}^d P(x_i|c)
+\end{equation}
+其中$d$为属性的数目，$x_i$为样本$x$在第$i$个属性上的取值。
+
+由于对所有的类别来讲，$P(x)$都相同，
+所以基于上式的贝叶斯判定准则
+\begin{equation}
+    c^* = \arg\max_c P(c)\prod_{i = 1}^d P(x_i|c)
+\end{equation}
+
+对于离散属性而言，
+令$D_{cx_i}$表示在第$i$个属性上取值为$x_i$的样本组成的集合，
+则类条件概率可以估计
+\begin{equation}
+    P(c) = \frac{ |D_{cx_i}| }{D}
+\end{equation}
+
+
+\subsection{高斯判别分析}
+\subsubsection{算法原理}
+高斯判别分析属于机器学习算法中的分类算法，
+不妨假设样本数据为两种类别，
+它的大致思想是通过两个先验假设：
+一是样本数据的类别$y$在给定的情况下服从伯努利分布，
+二是不同类别中的样本数据分别服从多元高斯分布。
+首先估计出先验概率以及多元高斯分布的均值和协方差矩阵，
+然后再由贝叶斯公式求出一个新样本分别属于两类别的概率，
+预测结果取概率值大者。本文推导高斯判别分析算法的流程是，
+首先简单的推导出多元高斯分布、
+其次提出高斯判别分析算法的假设函数、然后构造损失函数、
+最后求解损失函数得出假设函数中的参数值。
+
+正态分布$X\sim N(\mu, \sigma^2)$ ，
+它的概率密度函数$\phi(x)$ 为
+\begin{equation}
+    \phi(x) = \frac{1}{\sigma \sqrt{2\pi}}
+    e^{ -\frac{(x -\mu)^2}{2\sigma^2} }
+\end{equation}
+
+多元正态分布$X\sim N(\mu, \Sigma)$ ，
+它的概率密度函数$\phi(x)$ 为
+\begin{equation}
+    \phi(x) = \frac{1}{ \sqrt{2\pi} |\Sigma|^{\frac{1}{2}}}
+    e^{ -\frac{1}{2}(x -\mu)^T{\Sigma^{ - 1}}(x -\mu) }
+\end{equation}
+
+不妨假设含有$m$个样本数据，
+写成分布函数的形式即
+\begin{equation}
+    p(y) = \phi^y +( 1-\phi)^(1 -y)
+\end{equation}
+\begin{equation}
+    p(x|y = 0) = \frac{1}{ \sqrt{2\pi} |\Sigma|^{\frac{1}{2}}}
+    e^{ -\frac{1}{2}(x -\mu_0)^T{\Sigma^{ - 1}}(x -\mu_0) }
+\end{equation}
+\begin{equation}
+    p(x|y = 1) = \frac{1}{ \sqrt{2\pi} |\Sigma|^{\frac{1}{2}}}
+    e^{ -\frac{1}{2}(x -\mu_1)^T{\Sigma^{ - 1}}(x -\mu_1) }
+\end{equation}
+上述模型中的未知参数为$\phi, \Sigma, \mu_0, \mu_1 $。
+
+已知样本数据含有参数的概率分布，
+根据统计学的最大似然估计可以推导高斯判别分析模型的损失函数
+
+\begin{equation}
+    L(\phi, \mu_0, \mu_1, \Sigma) =
+    \sum_{i = 1}^m y^{(i)}\ln p(x^{(i)}|y^{(i)} = 1)
+    +\sum_{i = 1}^m (1 -y^{(i)})\ln p(x^{(i)}|y^{(i)} = 0)
+    +\sum_{i = 1}^m \ln p(y^{(i)})
+\end{equation}
+对最大似然函数 $L(\phi, \mu_0, \mu_1, \Sigma)$ 求偏导，
+令其相应偏导数为零即可求出参数
+\begin{equation}
+    \begin{cases}
+        \phi = \frac{\sum_{i = 1}^m I(y^{(i)} = 1)}{m} \\
+        \mu_0 = \frac{\sum_{i = 1}^m I(y^{(i)} = 0)x^{(i)}}
+        {\sum_{i = 1}^m I(y^{(i)} = 0)}                \\
+        \mu_1= \frac{\sum_{i = 1}^m I(y^{(i)} = 1)x^{(i)}}
+        {\sum_{i = 1}^m I(y^{(i)} = 1)}                \\
+        \Sigma = \frac{1}{m}\sum_{i = 1}^m (x -\mu_{y^{(i)}})(x -\mu_{y^{(i)}})^T
+    \end{cases}
+\end{equation}
+
+\subsubsection{代码实现}
+高斯判别分析代码如下
+\lstinputlisting[
+    style       =   python,
+    label       =   {逻辑回归}
+]{code/algorithm/gda.py}
+\subsection{逻辑回归}
+\subsubsection{算法原理}
+逻辑回归的过程可以概括为：面对一个回归或者分类问题，
+建立代价函数，然后通过优化方法迭代求解出最优的模型参数，
+然后测试验证我们这个求解的模型的好坏。
+Logistic Regression 通过 Sigmoid 函数预测样本属于正类的概率，
+其预测模型为
+\begin{equation}
+    \hat{y} = \frac{1}{1 + e^{ - (\omega^Tx + b)}}
+\end{equation}
+
+损失函数为
+\begin{equation}
+    L(\omega, b) = y \ln{\hat{y}} +(1 - y)\ln{(1 -\hat{y})}
+\end{equation}
+
+通过优化损失函数使得损失最小化， 即
+\begin{equation}
+    \min_{\omega, b} L(\omega, b)
+\end{equation}
+
+可以采用梯度下降法进行优化，即
+\begin{equation}
+    \begin{cases}
+        \omega = \omega - \frac{\partial L}{\partial \omega} \\
+        b = b- \frac{\partial L}{\partial b}
+    \end{cases}
+\end{equation}
+此外，优化算法还包括
+\begin{itemize}
+    \item   Newton Method(牛顿法)
+    \item Conjugate gradient method(共轭梯度法)
+    \item Quasi-Newton Method(拟牛顿法)
+    \item BFGS Method
+    \item L-BFGS(Limited-memory BFGS)
+    \item 其他
+\end{itemize}
+
+
+
+
+\subsubsection{代码实现}
+为了使代码编写更规范，我们首先定义一个 BoneModel 类，
+本文实现的所有模型均基于此类，代码如下
+\lstinputlisting[
+    style       =   python,
+    label       =   {模型}
+]{code/algorithm/model.py}
+
+逻辑回归代码如下
+\lstinputlisting[
+    style       =   python,
+    label       =   {逻辑回归}
+]{code/algorithm/lr.py}
+
+
+
+\subsection{支持向量机}
+\subsubsection{算法原理}
+特征空间中任意一点 $x$ 到超平面的距离
+\begin{equation}
+    r = \frac{g(x)}{ \Vert \boldsymbol{w} \Vert }
+\end{equation}
+离分类面最近的样本满足$\Vert g(x) = 1\Vert$，
+所以分类间隔为 $2\Vert \boldsymbol{w}\Vert$。
+
+线性 SVM 的优化问题可以表示为
+\begin{equation}
+    \label{lsvm}
+    \begin{aligned}
+         & \min_{w,b} \frac{1}{2} \Vert \boldsymbol{w} \Vert^2\,                   \\
+         & \text{s.t.}\, y_i(\boldsymbol{w} \cdot\boldsymbol{x_i} + b) - 1 \geq  0
+    \end{aligned}
+\end{equation}
+过两类样本中离分类面最近的点，
+且平行于最优超平面的超平面 $H_1$ 和 $H_2$ 上的训练样本，
+就是使式\ref{lsvm}等号成立的样本，也叫支持样本。
+线性情况下最优分类面的决策函数
+\begin{equation}
+    \begin{cases}
+        f(\boldsymbol{x})   = \sgn[g (\boldsymbol{x})]
+        = \sgn[\boldsymbol{w^\ast} \cdot \boldsymbol{x} + b^\ast] \\
+        \boldsymbol{w^\ast} =\sum^N_{i = 1}\alpha^\ast_i y_i      \\
+        b^\ast = y_j - \sum^N_{i = 1}\alpha^\ast_i y_i \boldsymbol{x_i}\cdot\boldsymbol{x_j}
+    \end{cases}
+\end{equation}
+
+非线性SVM需要添加一个松弛因子 $\xi_i $，
+使得 $y_i[\boldsymbol{w} \cdot\boldsymbol{x_i} + b] - 1 + \xi_i  \geq 0$成立。
+线性不可分下的优化目标
+\begin{equation}
+    \label{usvm}
+    \min_{ \boldsymbol{w},b} \frac{1}{2} \Vert  \boldsymbol{w} \Vert^2 +
+    C\sum^N_{i = 1}\xi_i
+\end{equation}
+非线性支撑矢量机的决策函数
+\begin{equation}
+    f(\boldsymbol{x}) = \sgn[\sum^N_{i = 1}\alpha_i y_i
+    K(\boldsymbol{x_i}, \boldsymbol{x}) + b]
+\end{equation}
+其中$K(\boldsymbol{x_i}, \boldsymbol{x_j})=\boldsymbol{x_i}\cdot \boldsymbol{x_j}$。
+
+\subsubsection{算法伪代码}
+SMO伪代码如算法\ref{fit}
+\begin{algorithm}
+    \caption{SMO算法}
+    \label{fit}
+    \begin{algorithmic}[1] %每行显示行号  
+        \Require 数据集$\{(x^{(i)},y^{(i)}), i=1\dots m\}$，调和系数$C$，容差$t$，最大迭代数$M$
+        \Ensure 乘子$\alpha$，阈值$b$
+        \Function {KMeansFit}{$D, C, t, M$}
+        \State $\alpha_i=0, i=1\dots m,b=0$
+        \State $p=0, \epsilon=10^{-5}$
+
+        \While {$p<M$}
+        \State $c_\alpha=0$
+        \For {$i=1:m$}
+        \State $E_i= \sum^m_{k=1} \alpha_k
+            y^{(k)}\langle x^{(k)},x^{(i)}\rangle -y^{(i)}$
+        \If {$(y^{(i)}E_i<-t \&\& \alpha_i<C)||
+                (y^{(i)}E_i>t \&\& \alpha_i>0)$}
+        \State 随机选择 $j \neq i$
+        \State $E_i= \sum^m_{k=1} \alpha_k
+            y^{(k)}\langle x^{(k)},x^{(j)}\rangle -y^{(j)}$
+        \State $\alpha_i^{(o)}=\alpha_i$
+        \State $\alpha_j^{(o)}=\alpha_j$
+
+        \State $L=
+            \begin{cases}
+                \max(0,\alpha_j-\alpha_i), y^{(i)}\neq y^{(j)} \\
+                \max(0,\alpha_j+\alpha_i-C), y^{(i)}= y^{(j)}
+            \end{cases}
+        $
+        \State $H=
+            \begin{cases}
+                \min(C,C+\alpha_j-\alpha_i), y^{(i)}\neq y^{(j)} \\
+                \min(C,\alpha_j+\alpha_i), y^{(i)}= y^{(j)}
+            \end{cases}
+        $
+        \If {$L=H$}
+        \State continue
+        \EndIf
+        \State $
+            \eta =2\langle x^{(i)},x^{(j)}\rangle
+            -\langle x^{(i)},x^{(i)}\rangle
+            -\langle x^{(j)},x^{(j)}\rangle
+        $
+        \If {$\eta\geq 0$}
+        \State continue
+        \EndIf
+
+        \State $
+            \alpha_j=\alpha_j-\frac{y^{(j)}(E_i-E_j)}{\eta}
+        $
+        \State $
+            \alpha_j=
+            \begin{cases}
+                H, \alpha_j>H                    \\
+                \alpha_j,  L\leq \alpha_j \leq H \\
+                L, \alpha_j <L
+            \end{cases}
+        $
+        \algstore{myalg}
+    \end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+    \begin{algorithmic}[1]
+        \algrestore{myalg}
+        \If {$|\alpha_j-\alpha_j^o|<\epsilon$}
+        \State continue
+        \EndIf
+        \State $\alpha_i=\alpha_i^o+
+            y^{(j)}y^{(j)} (\alpha_i^o-\alpha_i)$
+        \State $b_1=b^o-E_i+
+            y^{(i)}(\alpha_i^o-\alpha_i)\langle x^{(i)},x^{(i)}\rangle
+            +y^{(j)}(\alpha_j^o-\alpha_j)\langle x^{(i)},x^{(j)}\rangle$
+        \State $b_2=b^o-E_i+
+            y^{(i)}(\alpha_i^o-\alpha_i)\langle x^{(i)},x^{(j)}\rangle
+            +y^{(j)}(\alpha_j^o-\alpha_j)\langle x^{(j)},x^{(j)}\rangle$
+        \State $b
+            \begin{cases}
+                b_1, 0<\alpha_i<C \\
+                b_2, 0<\alpha_j<C \\
+                \frac {b_1+b_2}{2}, \text{otherwise}
+            \end{cases}
+        $
+        \State $c_\alpha=c_\alpha+1$
+        \EndIf
+        \EndFor
+
+        \If {$c_\alpha=0$}
+        \State $p=p+1$
+        \Else
+        \State $p=0$
+        \EndIf
+        \EndWhile
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+\newpage
+
+\section{结果分析}
+本文将数据集分割成训练集和测试集，
+并在训练时进行五折交叉验证，
+每一种算法进行了十次实验。
+{{!asd}}
+\subsection{性能分析}
+\subsubsection{sklearn 逻辑回归}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：90.00\% \\  训练集准确率：88.89\% \\  测试集准确率：93.33\% \end{train}
+\subsubsection{sklearn 高斯朴素贝叶斯}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\begin{train}交叉验证平均准确率：87.78\% \\  训练集准确率：86.67\% \\  测试集准确率：93.33\% \end{train}
+\subsubsection{个人实现逻辑回归}
+\begin{train}交叉验证平均准确率：81.11\% \\  训练集准确率：81.11\% \\  测试集准确率：88.33\% \end{train}
+\begin{train}交叉验证平均准确率：62.22\% \\  训练集准确率：88.89\% \\  测试集准确率：91.67\% \end{train}
+\begin{train}交叉验证平均准确率：62.22\% \\  训练集准确率：85.56\% \\  测试集准确率：96.67\% \end{train}
+\begin{train}交叉验证平均准确率：72.22\% \\  训练集准确率：25.56\% \\  测试集准确率：30.00\% \end{train}
+\begin{train}交叉验证平均准确率：77.78\% \\  训练集准确率：82.22\% \\  测试集准确率：88.33\% \end{train}
+\begin{train}交叉验证平均准确率：78.89\% \\  训练集准确率：84.44\% \\  测试集准确率：88.33\% \end{train}
+\begin{train}交叉验证平均准确率：76.67\% \\  训练集准确率：82.22\% \\  测试集准确率：85.00\% \end{train}
+\begin{train}交叉验证平均准确率：80.00\% \\  训练集准确率：77.78\% \\  测试集准确率：71.67\% \end{train}
+\begin{train}交叉验证平均准确率：86.67\% \\  训练集准确率：85.56\% \\  测试集准确率：91.67\% \end{train}
+\begin{train}交叉验证平均准确率：71.11\% \\  训练集准确率：56.67\% \\  测试集准确率：56.67\% \end{train}
+\subsubsection{个人实现高斯判别分析}
+\begin{train}交叉验证平均准确率：57.78\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：57.41\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：58.21\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：58.09\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：57.65\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：56.42\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：56.42\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：56.17\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：56.05\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+\begin{train}交叉验证平均准确率：58.02\% \\  训练集准确率：56.60\% \\  测试集准确率：58.17\% \end{train}
+
+
+\section{心得体会}
+机器学习是一门多领域交叉学科，
+学习机器学习可以巩固概率论、统计学、算法理论等
+许多门学科的基础知识，
+同时还能提前了解逼近论、凸分析等多门学科的内容，
+是人工智能专业本科生必须掌握的重要学科。
+
+\appendix
+\section{其他代码}
+\subsection{数据集}
+\lstinputlisting[
+    style       =   python,
+    label       =   {交叉验证}
+]{code/dataset.py}
+\subsection{训练和测试}
+\lstinputlisting[
+    style       =   python,
+    label       =   {交叉验证}
+]{code/main.py}
+
+\subsection{交叉验证}
+\lstinputlisting[
+    style       =   python,
+    label       =   {交叉验证}
+]{code/utils/kflod.py}
+
+\subsection{one-hot 编码}
+\lstinputlisting[
+    style       =   python,
+    label       =   {oh}
+]{code/utils/oh.py}
+
+\end{document}

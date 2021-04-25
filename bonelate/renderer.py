@@ -30,7 +30,7 @@ class Renderer(object):
                     else:
                         return ""
                 return str(scope) if flag == "v" else "{" + str(scope) + "}"
-        elif flag == "#":
+        elif flag == "#" or flag == "!":
             output = ""
             name, contents = value[0], value[1:]
             if name in scope:

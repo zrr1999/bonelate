@@ -6,8 +6,11 @@ Bonelate 是一个基于 pyparsing 针对 LaTeX 的 [mustache](http://mustache.g
 
 ## 背景
 
+Bonelate 是从 BoneTeX 模板块分离出来的项目，可以独立使用。
 
 ## 优势
+
+Bonelate 是兼容 mustache 的模板渲染器，且针对 LaTeX 的语法微调了标记符，例如将原本的`{{#partial}}`替换为`{{!partial}}`。通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX。
 
 ## 安装[![Downloads](https://pepy.tech/badge/bonelate)](https://pepy.tech/project/bonelate)
 
@@ -22,6 +25,35 @@ $ pip install bonelate
 ## 使用说明
 
 ### 示例
+
+```python
+from bonelate import render
+
+
+test_string = [
+        "{{person}} is awesome.",
+        "{{#persons}} awesome {{/persons}}",
+        "{{#persons}}{{name}} is awesome.{{/persons}}",
+        "{{!#undefined}} undefined{{/undefined}}",
+        "{{!#not_person}} not_person{{/not_person}}",
+        "{{!#persons}} error{{/persons}}",
+        "{{!#undefined}} undefined {{person}} {{/undefined}}",
+        """
+        {{#persons}}{{name}} is awesome.{{/persons}}
+        {{person}} is beautiful.
+        {{#is_person}}{{.}} is a person.{{/is_person}}
+        """,
+    ]
+for t in test_string:
+    print(render(t, {
+        "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Longping"}],
+        "person": "Xiao Ming",
+        "is_person": "Xiao Ming",
+        "not_person": False
+    }))
+
+
+```
 
 ## 更新日志
 

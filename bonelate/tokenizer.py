@@ -18,7 +18,7 @@ class Tokenizer(object):
     bracket_tag = (pp.Suppress("{{{") + variable + pp.Suppress("}}}")).addParseAction(
         lambda tokens: [["lv", tokens[0]]]
     )
-    open_tag = left + pp.oneOf(["#", "^", "!#"]) + variable + right
+    open_tag = left + pp.oneOf(["#", "!", "^", "?"]) + variable + right
     close_tag = left + "/" + variable + right
     literal = (pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]*}")).addParseAction(
         lambda tokens: [["l", tokens[0]]]
