@@ -2,7 +2,7 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Bonelate 是一个基于 pyparsing 针对 LaTeX 的 [mustache模版语言](http://mustache.github.io/) 的实现，与 chevron 相比，实现更为简短。
+Bonelate 是一个基于 pyparsing 针对 LaTeX 的 [mustache](http://mustache.github.io/) 模版语言变种的实现，与 [chevron]([noahmorrison/chevron: A Python implementation of mustache (github.com)](https://github.com/noahmorrison/chevron)) 相比，实现更为简短，函数形式的实现仅有59行，见minibonelate.py。
 
 ## 背景
 
@@ -39,5 +39,4 @@ $ pip install bonelate
 感谢以下参与项目的人：
 
 ## 使用许可
-未经许可，禁止商用。
-[GNU](LICENSE) © Rongrui Zhan
+[MIT](LICENSE) © Rongrui Zhan

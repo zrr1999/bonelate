@@ -4,7 +4,7 @@
 # @Author : 詹荣瑞
 # @File : setup.py
 # @desc : 本代码未经授权禁止商用
-import bonetex
+from bonelate import __version__
 from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding='UTF-8') as fh:
@@ -12,10 +12,10 @@ with open("README.md", "r", encoding='UTF-8') as fh:
 extras = {}
 setup(
     name="Bonelate",
-    version=bonetex.__version__,
+    version=__version__,
     author="六个骨头",
     author_email="2742392377@qq.com",
-    description="Bonelate 是一个基于 pyparsing 针对 LaTeX 的 mustache 模版语言的实现。",
+    description="Bonelate 是一个基于 pyparsing 针对 LaTeX 的 mustache 模版语言变种的实现。",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://gitee.com/zrr1999/bonetex",
@@ -28,7 +28,7 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     include_package_data=True,

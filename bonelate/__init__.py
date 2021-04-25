@@ -6,3 +6,4 @@
 # @desc : 本代码未经授权禁止商用
 from .renderer import render, Renderer
 from .tokenizer import tokenize, Tokenizer
+__version__ = "0.0.1"
