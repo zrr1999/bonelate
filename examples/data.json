@@ -1,0 +1,124 @@
+{
+  "accuracy": [
+    {
+      "method": "sklearn 逻辑回归",
+      "results": [
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        }
+      ]
+    },
+    {
+      "method": "sklearn 高斯朴素贝叶斯",
+      "results": [
+        {
+          "val": 90,
+          "train": 80,
+          "test": 90
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        }
+      ]
+    },
+    {
+      "method": "个人实现逻辑回归",
+      "results": [
+        {
+          "val": 90,
+          "train": 80,
+          "test": 85
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        }
+      ]
+    },
+    {
+      "method": "个人实现高斯判别分析",
+      "results": [
+        {
+          "val": 90,
+          "train": 80,
+          "test": 50
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        },
+        {
+          "val": 90,
+          "train": 80,
+          "test": 80
+        }
+      ]
+    }
+  ]
+}

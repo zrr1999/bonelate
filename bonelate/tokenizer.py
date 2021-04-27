@@ -6,10 +6,11 @@
 # @desc : 本代码未经授权禁止商用
 import pyparsing as pp
 
+white = pp.Suppress(pp.White()[0, 1])
 lbrace = pp.Suppress(pp.oneOf(["{", "<"]))
 rbrace = pp.Suppress(pp.oneOf(["}", ">"]))
-double_lbrace = lbrace * 2
-double_rbrace = rbrace * 2
+double_lbrace = lbrace * 2 + white
+double_rbrace = white + rbrace * 2
 
 
 class Tokenizer(object):

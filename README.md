@@ -13,7 +13,9 @@ Bonelate 是从 BoneTeX 模板块分离出来的项目，可以独立使用。
 
 ## 优势
 
-Bonelate 是兼容 mustache 的模板渲染器，且针对 LaTeX 的语法微调了标记符，例如将原本的`{{#partial}}`替换为`{{!partial}}`。通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX 项目。
+Bonelate 是兼容 mustache 的模板渲染器，且针对 LaTeX 的语法微调了标记符，
+原本的`{{#partial}}`也可以写作`{{!partial}}`，从而在不渲染的情况下 LaTeX 编译时也不会报错。
+通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX 项目。
 
 ## 安装[![Downloads](https://pepy.tech/badge/bonelate)](https://pepy.tech/project/bonelate)
 
@@ -34,6 +36,7 @@ $ pip install .
 ```
 
 ## 使用说明
+
 
 ### 示例
 
@@ -57,6 +60,8 @@ print(render(test_string, {
 ```
 
 ## 更新日志
+0.0.2 (2021.4.27)
+
 
 
 ## 维护者

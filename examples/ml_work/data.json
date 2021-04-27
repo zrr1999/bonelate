@@ -1,0 +1,8 @@
+{
+  "figures": {
+    "dataset": "\\begin{figure}[htbp]\n  \\centering \n  \\includegraphics[width=0.8\\textwidth]{images/2298183831048_1.png} \n  \\caption{KSC 数据预览图} \n  \\label{tab:2298183831048} \n\\end{figure} "
+  },
+  "tables": {
+    "results": "\\begin{table}[htbp]\n  \\centering \n  \\caption{训练测试结果} \n  \\label{tab:2298183831048} \n  \\begin{tabular}{|c|c|c|c|c|c|}\n    \\hline\n    accuracy & f1 & score & recall & precision\\\\\n    \\hline\n    训练集 & 0.9843707156567041 & 0.9843707156567041 & 0.9843707156567041 & 0.9843707156567041\\\\\n    \\hline\n    测试集 & 0.930306905370844 & 0.930306905370844 & 0.930306905370844 & 0.930306905370844\\\\\n    \\hline\n    训练集 & 1.0 & 1.0 & 1.0 & 1.0\\\\\n    \\hline\n    测试集 & 0.9482097186700768 & 0.9482097186700768 & 0.9482097186700768 & 0.9482097186700768\\\\\n    \\hline\n  \\end{tabular} \n\\end{table} "
+  }
+}

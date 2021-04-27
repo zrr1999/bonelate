@@ -5,17 +5,14 @@
 # @File : simple_example.py
 # @desc : 本代码未经授权禁止商用
 from bonelate import render
-from minibonelate import render as mini_render
-
-
 test_string = [
-        "{{person}} is awesome.",
-        "{{!persons}} awesome {{/persons}}",
-        "{{#persons}}{{name}} is awesome.{{/persons}}",
-        "{{?undefined}} undefined{{/undefined}}",
-        "{{?not_person}} not_person{{/not_person}}",
-        "{{^persons}} error{{/persons}}",
-        "{{^undefined}} undefined {{person}} {{/undefined}}",
+        "{{ person}} is awesome.",
+        "{{ !persons  }}awesome {{/persons}}",
+        "{{#persons}}{{name}} is awesome. {{/persons}}",
+        "{{?undefined}}undefined{{/undefined}}",
+        "{{?false}}{{false}}{{/false}}",
+        "{{^persons}}empty{{/persons}}",  # empty
+        "{{^undefined}}undefined {{person}}{{/undefined}}",
         """
         {{!persons}}{{name}} is awesome.{{/persons}}
         {{person}} is beautiful.
@@ -28,12 +25,6 @@ for t in test_string:
         "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
         "person": "Xiao Ming",
         "is_person": "Xiao Ming",
-        "not_person": False
-    }))
-    print(mini_render(t, {
-        "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
-        "person": "Xiao Ming",
-        "is_person": "Xiao Ming",
-        "not_person": False
+        "false": False
     }))
 
