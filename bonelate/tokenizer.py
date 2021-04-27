@@ -28,7 +28,7 @@ class Tokenizer(object):
     token_list = (lbrace + ~pp.Suppress("{") + parser + rbrace).addParseAction(
         lambda tokens: [["l", "{"], *tokens, ["l", "}"]]
     )
-    open_tag = double_lbrace + pp.oneOf(["#", "!", "^", "?"]) + variable + double_rbrace
+    open_tag = double_lbrace + pp.oneOf(["!", "?"]) + variable + double_rbrace
     close_tag = double_lbrace + "/" + variable + double_rbrace
     block = (open_tag + parser + close_tag.suppress()).addParseAction(
         lambda tokens: [[tokens[0], tokens[1:]]]

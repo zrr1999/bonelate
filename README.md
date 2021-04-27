@@ -2,9 +2,12 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Bonelate 是一个基于 pyparsing 针对 LaTeX 的 [mustache](http://mustache.github.io/) 模版语言变种的实现，
-与 [chevron](https://github.com/noahmorrison/chevron) 相比，实现更为简短，
-Tokenizer 类仅有 23 行，Renderer 类仅有51行。
+Bonelate 是一个基于 pyparsing 针对 LaTeX 的类似 [mustache](http://mustache.github.io/) 语言的模版渲染器。
+与采取 mustache 的其他模板渲染器相比
+（例如[chevron](https://github.com/noahmorrison/chevron)
+或[pymustache](https://github.com/lotabout/pymustache)），
+Bonelate 针对 LaTeX 的语法做了很多优化，使模板文件在不渲染的情况下也可使用 LaTeX 工具编译通过。
+且实现更为简短，Tokenizer 类仅有 23 行，Renderer 类仅有51行。
 minibonelate.py中是单文件实现，仅有59行。
 
 ## 背景
@@ -13,7 +16,7 @@ Bonelate 是从 BoneTeX 模板块分离出来的项目，可以独立使用。
 
 ## 优势
 
-Bonelate 是兼容 mustache 的模板渲染器，且针对 LaTeX 的语法微调了标记符，
+Bonelate 是参考 mustache 且针对 LaTeX 的语法微调了标记符，
 原本的`{{#partial}}`也可以写作`{{!partial}}`，从而在不渲染的情况下 LaTeX 编译时也不会报错。
 通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX 项目。
 
@@ -66,7 +69,7 @@ print(render(test_string, {
 
 ## 维护者
 
-[@詹荣瑞](https://github.com/zrr1999)
+[@六个骨头](https://gitee.com/zrr1999)
 
 ## 如何贡献
 

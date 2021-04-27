@@ -8,11 +8,11 @@ from bonelate import render
 test_string = [
         "{{ person}} is awesome.",
         "{{ !persons  }}awesome {{/persons}}",
-        "{{#persons}}{{name}} is awesome. {{/persons}}",
+        "{{!persons}}{{name}} is awesome. {{/persons}}",
         "{{?undefined}}undefined{{/undefined}}",
         "{{?false}}{{false}}{{/false}}",
-        "{{^persons}}empty{{/persons}}",  # empty
-        "{{^undefined}}undefined {{person}}{{/undefined}}",
+        "{{?persons}}empty{{/persons}}",  # empty
+        "{{?undefined}}undefined {{person}}{{/undefined}}",
         """
         {{!persons}}{{name}} is awesome.{{/persons}}
         {{person}} is beautiful.
