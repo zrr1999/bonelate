@@ -10,27 +10,28 @@ from minibonelate import render as mini_render
 
 test_string = [
         "{{person}} is awesome.",
-        "{{#persons}} awesome {{/persons}}",
+        "{{!persons}} awesome {{/persons}}",
         "{{#persons}}{{name}} is awesome.{{/persons}}",
-        "{{!#undefined}} undefined{{/undefined}}",
-        "{{!#not_person}} not_person{{/not_person}}",
-        "{{!#persons}} error{{/persons}}",
-        "{{!#undefined}} undefined {{person}} {{/undefined}}",
+        "{{?undefined}} undefined{{/undefined}}",
+        "{{?not_person}} not_person{{/not_person}}",
+        "{{^persons}} error{{/persons}}",
+        "{{^undefined}} undefined {{person}} {{/undefined}}",
         """
-        {{#persons}}{{name}} is awesome.{{/persons}}
+        {{!persons}}{{name}} is awesome.{{/persons}}
         {{person}} is beautiful.
-        {{#is_person}}{{.}} is a person.{{/is_person}}
+        {{!undefined}}123{{/undefined}}
+        {{!is_person}}{{.}} is a person.{{/is_person}}
         """,
     ]
 for t in test_string:
     print(render(t, {
-        "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Longping"}],
+        "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
         "person": "Xiao Ming",
         "is_person": "Xiao Ming",
         "not_person": False
     }))
     print(mini_render(t, {
-        "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Longping"}],
+        "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
         "person": "Xiao Ming",
         "is_person": "Xiao Ming",
         "not_person": False

@@ -11,7 +11,7 @@ with open("README.md", "r", encoding='UTF-8') as fh:
     long_description = fh.read()
 extras = {
     "test": ["pytest"],
-    "command": ["watchdog"],
+    "command": ["watchdog", "typer"],
 }
 setup(
     name="Bonelate",
