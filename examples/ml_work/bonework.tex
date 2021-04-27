@@ -1,0 +1,130 @@
+%!TEX program = xelatex
+\documentclass[cn,hazy,blue,14pt,normal]{elegantnote}
+% \title{算法设计与分析}
+% \author{詹荣瑞}
+% \institute{18170100045}
+
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tkz-fct}
+\usepackage{tkz-euclide}% 绘制线段命令(此处仅标注尺寸)
+\usepackage{subfig}
+\usepackage{overpic}
+
+\usetikzlibrary{shadows}
+\usetikzlibrary{intersections,decorations.text}
+\usetikzlibrary{dsp,chains}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\z}{\mathpzc{z}}
+\newcommand{\sgn}{\text{sgn}}
+\usetikzlibrary{
+    shapes.geometric,   %几何形状
+    calc,               %计算
+    positioning         %用于定位
+}
+\usetikzlibrary{arrows,arrows.meta}
+\tikzset{
+    every picture/.style={
+        >=latex,
+        node distance=5mm and 5mm
+        %有无and的区别见手册positioning部分
+}}
+\input{main.tikzstyles}
+\newtheorem{train}{实验}
+
+\begin{document}
+\includepdf{cover.pdf}
+
+\section{实验配置}
+\begin{itemize}
+    \item 程序测试系统：Windows 10
+    \item 程序运行环境：Python3.7
+    \item Python库（标准库未列出）：numpy, sklearn, bonelate
+    \item 报告编写环境：Bone\TeX{}, \TeX{} Live 2020
+    \item 开发工具：PyCharm, VSCode
+\end{itemize}
+
+\section{实验说明}
+本次实验的目标为利用提供的高光谱遥感数据集进行特征选择，有以下实验要求：
+\begin{itemize}
+    \item 利用给定的数据集，进行数据特征（波段）选择。
+    \item 具体选择方法和策略不限制。
+    \item 实验结果度量标准不少于 4 种，结合课程学习中的指标。
+    \item 建议对比不同类型的选择方法，给出各种方法的优缺点。
+\end{itemize}
+数据集给出的数据维数较高，其中存在了许多冗余的信息以及无关信息，如果把这些
+实际的数据直接放到神经网络中则很难得出较好的结果，而且计算量大大增加，因此需要
+进行特征提取，把影响实验效果的特征清除掉，用较少的特征对实验结果进行分析。
+
+\section{数据集介绍}
+在本次实验中，提供了多种数据可以选择，由于目标在于实现过程，数据集选择无关，
+此处选择了肯尼迪航天中心数据 KSC。
+机载可见光红外成像光谱仪(NASA AVIRIS)仪器于 1996 年 3 月 23 日在佛罗里达
+州肯尼迪航天中心（KSC）上空获取数据。AVIRIS 采集 224 个波段的数据，这些波段的宽
+度为 10 纳米，中心波长为 400-2500 纳米。从大约 20 公里的高度获得的 KSC 数据具有 18
+米的空间分辨率。去除吸水率和低信噪比波段后，用 176 个波段进行分析。训练数据是利
+用肯尼迪航天中心提供的彩色红外摄影和陆地卫星专题制图仪（TM）图像绘制的土地覆盖
+图选择的。植被分类方案是由 KSC 人员制定的，目的是确定在陆地卫星和这些 AVIRIS 数
+据的空间分辨率上可辨别的功能类型。由于某些植被类型的光谱特征具有相似性，因此很
+难区分这种环境下的土地覆盖。为便于分类，为现场定义了 13 个类别，代表该环境中出现
+的各种土地覆盖类型。
+数据集预览如下图所示：
+
+{{figures.dataset}}
+
+数据集尺寸为 $512 \times 614  \times 176$，大小为 54.1MB，
+相应的结果尺寸为$ 512 \times 614$，大小为 3.16KB。
+
+\section{特征选择}
+一个典型机器学习问题是通过样本特征预测对应的值，如果样本特征少，可以增加特
+征，而有时候特征较多，则需要较少一些特征，较少过拟合，提高模型泛化能力，加快模型
+训练速度并获得更好的性能，
+特征选择主要有三种选择方法：
+\begin{enumerate}
+    \item 过滤法（Filter）: 按照发散性或者相关性对各个特征进行评分，设定阈值或者待选择
+          阈值的个数，选择特征。
+    \item 包裹法（Wrapper）：根据目标函数，每次选择若干特征或者排除若干特征，直到选择
+          出最佳的子集。
+    \item 嵌入法（Embedding）：先使用某些机器学习的算法和模型进行训练，得到各个特征的
+          权值系数，根据系数从大到小选择特征。类似于 Filter 方法，但是是通过训练来确定
+          特征的优劣。
+\end{enumerate}
+
+\subsection{单变量选择法}
+单变量特征选择是通过选择那些基于单变量统计检验 (univariate statistical tests) 得
+出的最优特征来实现的，这是 Filter 法的一种。它可以看作是估计器的一个预处理步骤。这
+里使用了 Sklearn 中的 SelectKBest 对每个特征进行评分，并选择出指定数目的特征，从而
+达到选择的效果，这种方法并未考虑到不同特征之间的相互关系，本题中选择了 120 个特
+征。
+\subsection{递归特征消除法}
+递归特征消除（Recursive feature elimination）是 Wrapper 法中的一种，其主要思想
+是反复构建模型，然后选出最好的（或者最差的）特征（根据系数来选），把选出来的特征
+放到一边，然后在剩余的特征上重复这个过程，直到遍历了所有的特征。在这个过程中被
+消除的次序就是特征的排序，本题中选择了 80 个特征的组合。
+RFE 的稳定性很大程度上取决于迭代时，底层用的哪种模型。比如 RFE 采用的是普
+通的回归（LR），没有经过正则化的回归是不稳定的，那么 RFE 就是不稳定的。假如采用
+的是 Lasso/Ridge，正则化的回归是稳定的，那么 RFE 就是稳定的。
+
+\section{结果分析}
+ {{tables.results}}
+由上表可知，RFE 在选择的特征数少于 UFS 的情况下，效果仍好于 UFS。对于 UFS
+法，优点是直观，可解释性更好，但是最优的组合效果并不一定是最好的。对于 RFE 法，
+计算量更大，需要考虑不同组合的效果。递归式特征消除的主要思路是反复建立多种模型，
+每一次根据系数的不挑出差的特征，并去除挑出来的特征，然后在剩余的特征上重复该过
+程，直到遍历了所有的特征。
+
+\section{心得体会}
+单变量选择法和递归特征消除法是高光谱遥感图像特征选择问题的常用方法，
+也是图像特征选择的基础内容，
+是人工智能专业本科生必须掌握的重要知识。
+
+\appendix
+
+\section{代码实现}
+\lstinputlisting[
+    style       =   python,
+    label       =   {逻辑回归}
+]{code/main.py}
+
+\end{document}
