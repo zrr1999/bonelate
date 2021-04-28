@@ -6,9 +6,10 @@
 # @desc : 本代码未经授权禁止商用
 import pyparsing as pp
 
-white = pp.Suppress(pp.White()[0, 1])
-lbrace = pp.Suppress(pp.oneOf(["{", "<"]))
-rbrace = pp.Suppress(pp.oneOf(["}", ">"]))
+white = pp.White()[0, 1].suppress()
+line = pp.oneOf(["\n", "\r"])[...].suppress()
+lbrace = pp.oneOf(["{", "<"]).suppress()
+rbrace = pp.oneOf(["}", ">"]).suppress()
 double_lbrace = lbrace * 2 + white
 double_rbrace = white + rbrace * 2
 
@@ -22,14 +23,14 @@ class Tokenizer(object):
     tag = (double_lbrace + variable + double_rbrace).addParseAction(
         lambda tokens: [["v", tokens[0]]]
     )
-    bracket_tag = (lbrace + double_lbrace + variable + rbrace + double_rbrace).addParseAction(
-        lambda tokens: [["lv", tokens[0]]]
+    bracket_tag = (lbrace + tag + rbrace).addParseAction(
+        lambda tokens: [["l", "{"], *tokens, ["l", "}"]]
     )
     token_list = (lbrace + ~pp.Suppress("{") + parser + rbrace).addParseAction(
         lambda tokens: [["l", "{"], *tokens, ["l", "}"]]
     )
-    open_tag = double_lbrace + pp.oneOf(["!", "?"]) + variable + double_rbrace
-    close_tag = double_lbrace + "/" + variable + double_rbrace
+    open_tag = double_lbrace + pp.oneOf(["!", "?"]) + variable + double_rbrace + line
+    close_tag = double_lbrace + pp.Literal("/") + variable + double_rbrace + line
     block = (open_tag + parser + close_tag.suppress()).addParseAction(
         lambda tokens: [[tokens[0], tokens[1:]]]
     )

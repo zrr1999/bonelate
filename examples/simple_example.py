@@ -4,9 +4,11 @@
 # @Author : 詹荣瑞
 # @File : simple_example.py
 # @desc : 本代码未经授权禁止商用
-from bonelate import render
+from bonelate import render, tokenize
 test_string = [
+        "I ({{{cannot}}}) be seen!\t",
         "{{ person}} is awesome.",
+        "| {{{ string }}} |",
         "{{ !persons  }}awesome {{/persons}}",
         "{{!persons}}{{name}} is awesome. {{/persons}}",
         "{{?undefined}}undefined{{/undefined}}",
@@ -21,10 +23,12 @@ test_string = [
         """,
     ]
 for t in test_string:
+    # print(tokenize(t))
     print(render(t, {
         "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
         "person": "Xiao Ming",
         "is_person": "Xiao Ming",
-        "false": False
+        "false": False,
+        "string": "---"
     }))
 
