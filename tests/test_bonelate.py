@@ -11,6 +11,7 @@ import bonelate
 
 class TestBonelate(object):
 
+    @staticmethod
     def _test_yaml(self, path: str):
         with open(path) as file:
             tests = yaml.load(file, Loader=yaml.FullLoader)['tests']

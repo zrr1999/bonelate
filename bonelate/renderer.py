@@ -5,14 +5,17 @@
 # @File : renderer.py
 # @desc : 本代码未经授权禁止商用
 from bonelate.tokenizer import tokenize
-from typing import Union
+from typing import Union, Iterable, Callable
+from bonelate.plugins import NumberPlugin
 
 
 class Renderer(object):
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict, plugins: Iterable[Callable] = ()):
         self.data = data
         self.scopes = [data]
+        for p in plugins:
+            self.data = p(self.data)
 
     def __call__(self, template: str) -> str:
         return self.render(template)
@@ -68,4 +71,6 @@ class Renderer(object):
 def render(template: Union[str, list], data: dict) -> str:
     if isinstance(template, str):
         template = tokenize(template)
-    return Renderer(data).render(template)
+    return Renderer(data, [
+        NumberPlugin(2)
+    ]).render(template)

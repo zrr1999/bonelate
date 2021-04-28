@@ -15,7 +15,7 @@ Bonelate 是从 BoneTeX 模板块分离出来的项目，可以独立使用。
 ## 优势
 
 Bonelate 是参考 mustache 且针对 LaTeX 的语法微调了标记符，
-原本的`{{#partial}}`也可以写作`{{!partial}}`，从而在不渲染的情况下 LaTeX 编译时也不会报错。
+原本的`{{#partial}}`改为`{{!partial}}`，从而在不渲染的情况下 LaTeX 编译时也不会报错。
 通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX 项目。
 
 ## 安装[![Downloads](https://pepy.tech/badge/bonelate)](https://pepy.tech/project/bonelate)

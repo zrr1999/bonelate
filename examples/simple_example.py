@@ -29,6 +29,6 @@ for t in test_string:
         "person": "Xiao Ming",
         "is_person": "Xiao Ming",
         "false": False,
-        "string": "---"
+        "string": 3.4234
     }))
 
