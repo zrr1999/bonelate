@@ -40,7 +40,7 @@ setup(
     extras_require=extras,
     entry_points={
         'console_scripts': [
-            'bonetex=bonetex:main',
+            'bonelate=bonelate:app',
         ]
     }
 )

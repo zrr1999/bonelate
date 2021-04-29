@@ -12,9 +12,6 @@ class NumberPlugin(Plugin):
     def __init__(self, precision: int = 4):
         self.precision = precision
 
-    def __call__(self, data: dict) -> dict:
-        return self.transform(data)
-
     def transform(self, data):
         if isinstance(data, float):
             data = format(data, f".{self.precision}f")

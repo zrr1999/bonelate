@@ -2,11 +2,7 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Bonelate 是一个基于 pyparsing 针对 LaTeX 的类似 [mustache](http://mustache.github.io/) 语言的模版渲染器。
-与采取 mustache 的其他模板渲染器相比（例如[chevron](https://github.com/noahmorrison/chevron)或[pymustache](https://github.com/lotabout/pymustache)），
-Bonelate 针对 LaTeX 的语法做了很多优化，使模板文件在不渲染的情况下也可使用 LaTeX 工具编译通过。
-且实现更为简短，Tokenizer 类仅有 23 行，Renderer 类仅有51行。
-minibonelate.py中是单文件实现，仅有59行。
+Bonelate 是一个基于 pyparsing 针对 LaTeX 的类似 mustache 语言的模版渲染器。 与采取 mustache 的其他模板渲染器相比（例如chevron或pymustache）， Bonelate 针对 LaTeX 的语法做了很多优化，使模板文件在不渲染的情况下也可使用 LaTeX 工具编译通过。同时Bonelate的实现极为简短，Tokenizer 类仅有 23 行，Renderer 类仅有51行。
 
 ## 背景
 
@@ -61,8 +57,16 @@ print(render(test_string, {
 
 ### 命令行示例
 
+如果你的环境变量中有 python 脚本目录，你可以使用
+
 ```bash
-$ python .\command.py render .\examples\ml_work\bonework.tex .\examples\ml_work\data.json
+$ bonelate render .\examples\ml_work\bonework.tex .\examples\ml_work\data.json
+```
+
+如果没有的话，你需要使用如下命令
+
+```bash
+$ python bonelate render .\examples\ml_work\bonework.tex .\examples\ml_work\data.json
 ```
 
 
@@ -70,8 +74,6 @@ $ python .\command.py render .\examples\ml_work\bonework.tex .\examples\ml_work\
 ## 更新日志
 
 0.0.2 (2021.4.27)
-
-
 
 ## 维护者
 
