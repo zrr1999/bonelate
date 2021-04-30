@@ -23,7 +23,7 @@ test_string = [
         """,
     ]
 for t in test_string:
-    # print(tokenize(t))
+    print(tokenize(t))
     print(render(t, {
         "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
         "person": "Xiao Ming",

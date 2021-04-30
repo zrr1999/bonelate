@@ -17,10 +17,10 @@ class Renderer(object):
         for p in plugins:
             self.data = p(self.data)
 
-    def __call__(self, template: str) -> str:
+    def __call__(self, template: list) -> str:
         return self.render(template)
 
-    def render_block(self, flag, value):
+    def block_render(self, flag, value):
         scope = self.scopes[-1]
         if flag == "v":
             if value == ".":
@@ -58,19 +58,26 @@ class Renderer(object):
                     scope = scope[v]
             return ""
 
-    def render(self, template: str) -> str:
+    def render(self, template: list) -> str:
         output = ""
         for flag, value in template:
             if flag == "l":
                 output += value
             else:
-                output += self.render_block(flag, value)
+                output += self.block_render(flag, value)
         return output
+
+
+def render_file(path: str, data: dict):
+    with open(path + ".bonelate", encoding="utf-8") as file:
+        template = file.read()
+    with open(path + ".tex", mode="w", encoding="utf-8") as file:
+        file.write(render(template, data))
 
 
 def render(template: Union[str, list], data: dict) -> str:
     if isinstance(template, str):
         template = tokenize(template)
     return Renderer(data, [
-        NumberPlugin(2)
+        NumberPlugin(float_precision=2)
     ]).render(template)

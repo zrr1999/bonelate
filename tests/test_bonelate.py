@@ -12,7 +12,7 @@ import bonelate
 class TestBonelate(object):
 
     @staticmethod
-    def _test_yaml(self, path: str):
+    def _test_yaml(path: str):
         with open(path) as file:
             tests = yaml.load(file, Loader=yaml.FullLoader)['tests']
         # for test in tests:
@@ -28,14 +28,14 @@ class TestBonelate(object):
             assert result == expected
 
     def test_interpolation(self):
-        self._test_yaml("./spec/specs/interpolation.yml")
+        self._test_yaml("./specs/interpolation.yml")
 
     def test_inverted(self):
-        self._test_yaml("./spec/specs/inverted.yml")
+        self._test_yaml("./specs/inverted.yml")
 
 
 if __name__ == '__main__':
-    with open("./spec/specs/interpolation.yml") as file:
+    with open("./specs/interpolation.yml") as file:
         tests = yaml.load(file, Loader=yaml.FullLoader)['tests']
     for test in tests:
         context = test['data']

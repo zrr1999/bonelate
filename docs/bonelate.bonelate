@@ -1,0 +1,17 @@
+%! Author = tczrr
+%! Date = 2021/4/29
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+% Document
+\begin{document}
+{{!sections}}
+{{!title}}\section{{{.}}}{{/title}}
+{{content}}
+{{/sections}}
+\end{document}

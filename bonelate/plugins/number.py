@@ -9,8 +9,8 @@ from .plugin import Plugin
 
 class NumberPlugin(Plugin):
 
-    def __init__(self, precision: int = 4):
-        self.precision = precision
+    def __init__(self, float_precision: int = 4):
+        self.precision = float_precision
 
     def transform(self, data):
         if isinstance(data, float):

@@ -6,13 +6,15 @@
 # @desc : 本代码未经授权禁止商用
 from bonelate import __version__
 from setuptools import setup, find_packages
-
+from functools import reduce
 with open("README.md", "r", encoding='UTF-8') as fh:
     long_description = fh.read()
 extras = {
     "test": ["pytest"],
     "command": ["watchdog", "typer"],
 }
+extras["all"] = reduce(lambda x, y: x + y, extras.values())
+
 setup(
     name="Bonelate",
     version=__version__,
