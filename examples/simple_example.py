@@ -4,7 +4,7 @@
 # @Author : 詹荣瑞
 # @File : simple_example.py
 # @desc : 本代码未经授权禁止商用
-from bonelate import render, tokenize
+from bonelate import render, parse
 test_string = [
         "I ({{{cannot}}}) be seen!\t",
         "{{ person}} is awesome.",
@@ -23,7 +23,6 @@ test_string = [
         """,
     ]
 for t in test_string:
-    print(tokenize(t))
     print(render(t, {
         "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
         "person": "Xiao Ming",

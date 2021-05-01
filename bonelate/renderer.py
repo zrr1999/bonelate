@@ -4,7 +4,7 @@
 # @Author : 詹荣瑞
 # @File : renderer.py
 # @desc : 本代码未经授权禁止商用
-from bonelate.tokenizer import tokenize
+from bonelate.parser import parse
 from typing import Union, Iterable, Callable
 from bonelate.plugins import NumberPlugin
 
@@ -77,7 +77,7 @@ def render_file(path: str, data: dict):
 
 def render(template: Union[str, list], data: dict) -> str:
     if isinstance(template, str):
-        template = tokenize(template)
+        template = parse(template)
     return Renderer(data, [
         NumberPlugin(float_precision=2)
     ]).render(template)
