@@ -35,12 +35,4 @@ class TestBonelate(object):
 
 
 if __name__ == '__main__':
-    with open("./specs/interpolation.yml") as file:
-        tests = yaml.load(file, Loader=yaml.FullLoader)['tests']
-    for test in tests:
-        context = test['data']
-        template = test['template']
-        expected = test['expected']
-        print(template, context)
-        print("->")
-        print(expected)
+    pytest.main()

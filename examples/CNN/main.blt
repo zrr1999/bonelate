@@ -1,0 +1,53 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{3d}
+\definecolor{dgreen}{RGB}{63,127,0}
+\definecolor{dred}{RGB}{144,14,3}
+\begin{document}
+\tdplotsetmaincoords{60}{50}
+\begin{tikzpicture}[tdplot_main_coords,line join=miter,font=\sffamily]
+\path[tdplot_screen_coords] (-2,0);
+\pgfmathsetmacro{\xstretch}{4}
+\edef\Cols{red,dgreen,purple,yellow,orange}
+\edef\LstCols{{"red","dgreen","purple","yellow","orange"}}
+\foreach \XX in {1,2}
+ {\begin{scope}[canvas is yz plane at x=-0.8+0.4*\XX]
+   \pgfmathtruncatemacro{\fullness}{120-20*\XX}
+   \draw[fill=dred!\fullness!red]
+   (-1,-1) rectangle (1,1);
+  \end{scope}}
+\foreach \Col [count=\X starting from 0,remember=\X as \LastX] in \Cols
+ {\foreach \XX in {1,2,3,4}
+ {\draw[thick,\Col] (\xstretch*\X+0.4*\XX-0.4,0,0) -- (\xstretch*\X+0.4*\XX,0,0);
+  \begin{scope}[canvas is yz plane at x=\xstretch*\X+0.4*\XX]
+   \pgfmathtruncatemacro{\fullness}{120-20*\XX}
+   \draw[fill=\Col!\fullness] (-1,-1) rectangle (1,1);
+  \end{scope}}
+  \node[anchor=west] at (\xstretch*\X,1,1){$x_\X$};
+  \draw[thick,\Col] (\xstretch*\X+0.4*4,0,0) coordinate(front-\X)
+   -- (\xstretch*\X+1+0.4*4,0,0) coordinate(back-\X);
+  \begin{scope}[canvas is xy plane at z=0]
+   \ifnum\X>0
+    \foreach \Z in {0,...,\LastX}
+    {\pgfmathsetmacro{\mycol}{\LstCols[\Z]}
+    \draw[thick,\mycol,overlay] (front-\Z) to[out=-90,in=-90,looseness=1.5] (back-\X);}
+   \fi
+  \end{scope}
+  \begin{scope}[canvas is yz plane at x=\xstretch*\X+1+0.4*4,transform shape]
+   \ifnum\X=4
+    \node[draw,fill=white] (BN-\X) at (0,0) {Transition layer};
+   \else
+    \node[draw,fill=white] (BN-\X) at (0,0) {BN--RelU--Conv};
+   \fi
+  \end{scope}
+  \pgfmathtruncatemacro{\NextX}{\X+1}
+  \ifnum\X<4
+   \node[anchor=south west] at (BN-\X.north east) {$H_\NextX$};
+   \pgfmathsetmacro{\NextCol}{\LstCols[\NextX]}
+  \else
+   \pgfmathsetmacro{\NextCol}{"black"}
+  \fi
+  \draw[thick,\NextCol] (\xstretch*\X+1+0.4*4,0,0) -- ({\xstretch*(\X+1)+0.4*4},0,0);
+  }
+\end{tikzpicture}
+\end{document}

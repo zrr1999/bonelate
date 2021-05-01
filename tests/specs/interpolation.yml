@@ -236,3 +236,16 @@ tests:
 #    data: { string: "---" }
 #    template: '|{{& string }}|'
 #    expected: '|---|'
+
+  # LaTeX Insensitivity
+  - name: Interpolation With Padding
+    desc: Superfluous in-tag whitespace should be ignored.
+    data: { string: "---" }
+    template: '|{{ string }}|'
+    expected: '|---|'
+
+#  - name: LaTeX Command
+#    desc: LaTeX 命令以\开头，后面跟随一连串变量字符。
+#    data: { }
+#    template: '|{{{ string }}}|'
+#    expected: '|{---}|'

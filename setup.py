@@ -10,7 +10,7 @@ from functools import reduce
 with open("README.md", "r", encoding='UTF-8') as fh:
     long_description = fh.read()
 extras = {
-    "test": ["pytest"],
+    "test": ["pytest", "yaml"],
     "command": ["watchdog", "typer"],
 }
 extras["all"] = reduce(lambda x, y: x + y, extras.values())

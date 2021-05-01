@@ -1,0 +1,57 @@
+\documentclass[border = 0.2cm]{standalone}
+
+% Required packages and libraries
+\usepackage {tikz}
+\usetikzlibrary{patterns}
+
+\begin{document}
+
+\begin{tikzpicture} [thick]
+
+% Angle of Pendulum
+\newcommand{\ang}{30}
+
+% ground
+\draw [brown!80!red] (-2,0) -- (2,0);
+\fill [pattern = crosshatch dots,
+    pattern color = brown!80!red] (-2,0) rectangle (2,-.2);
+
+% cart
+\begin{scope} [draw = orange,
+    fill = orange!20,
+    dot/.style = {orange, radius = .025}]
+
+\filldraw [rotate around = {-\ang:(0,1.5)}] (.09,1.5) --
+    node [midway, right] {$l$}
+    node [very near end, right] {$m,I$}
+    +(0,2) arc (0:180:.09)
+    coordinate [pos = .5] (T) -- (-.09,1.5);
+
+\filldraw (-.65,.15) circle (.15);
+\fill [dot] (-.65,.15) circle;
+\filldraw (.65,.15) circle (.15);
+\fill [dot] (.65,.15) circle;
+
+\filldraw (-1,1.5) -- coordinate [pos = .5] (F)
+    (-1,.3) -- node [above = .3cm] {$M$}
+    (1,.3) -- (1,1.5)
+    coordinate (X) -- (.1,1.5)
+    arc (0:180:.1) -- (-1.014,1.5);
+
+\fill [dot] (0,1.52) circle;
+\end{scope}
+
+% lines and angles
+\begin{scope} [thin, orange!50!black]
+    \draw (T) -- (0,1.52) coordinate (P);
+    \draw [dashed] (P) + (0,-.5) -- +(0,2.2);
+    \draw (P) + (0,.5) arc (90:90-\ang:.5) node [black, midway, above] {$\theta$};
+\end{scope}
+
+% forces
+    \draw [stealth-] (F) -- node [above] {$F$} + (-1,0);
+    \draw [-stealth] (X) |- node [very near end, above right] {$x$} + (1,.3);
+
+\end{tikzpicture}
+
+\end{document}

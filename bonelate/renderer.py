@@ -69,7 +69,7 @@ class Renderer(object):
 
 
 def render_file(path: str, data: dict):
-    with open(path + ".bonelate", encoding="utf-8") as file:
+    with open(path + ".blt", encoding="utf-8") as file:
         template = file.read()
     with open(path + ".tex", mode="w", encoding="utf-8") as file:
         file.write(render(template, data))
