@@ -2,7 +2,9 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-Bonelate 是一个基于 pyparsing 针对 LaTeX 的类似 mustache 语言的模版渲染器。 与采取 mustache 的其他模板渲染器相比（例如chevron或pymustache）， Bonelate 针对 LaTeX 的语法做了很多优化，使模板文件在不渲染的情况下也可使用 LaTeX 工具编译通过。同时Bonelate的实现极为简短，Tokenizer 类仅有 23 行，Renderer 类仅有51行。
+Bonelate 是一个基于 pyparsing 针对 LaTeX 的类似 mustache 语言的模版渲染器。
+与采取 mustache 的其他模板渲染器相比（例如chevron或pymustache），
+Bonelate 针对 LaTeX 的语法做了很多优化，使模板文件在不渲染的情况下也可使用 LaTeX 工具编译通过。
 
 ## 背景
 

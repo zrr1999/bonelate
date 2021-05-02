@@ -6,7 +6,7 @@
 # @desc : 本代码未经授权禁止商用
 from bonelate import render
 
-with open("./tex_template.tex", encoding="utf-8") as file:
+with open("./tex_template.blt", encoding="utf-8") as file:
     test_string = file.read()
 
 with open("./tex_rendered.tex", mode="w", encoding="utf-8") as file:
@@ -41,3 +41,4 @@ with open("./tex_rendered.tex", mode="w", encoding="utf-8") as file:
                 {"val": 90, "train": 80, "test": 80},
             ]},
         ]}))
+

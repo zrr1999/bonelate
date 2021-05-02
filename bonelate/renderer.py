@@ -4,9 +4,11 @@
 # @Author : 詹荣瑞
 # @File : renderer.py
 # @desc : 本代码未经授权禁止商用
+import json
 from bonelate.parser import parse
 from typing import Union, Iterable, Callable
 from bonelate.plugins import NumberPlugin
+from bonelate.utils import get_scope, get_string
 
 
 class Renderer(object):
@@ -20,55 +22,34 @@ class Renderer(object):
     def __call__(self, template: list) -> str:
         return self.render(template)
 
-    def block_render(self, flag, value):
+    def block_render(self, flag, value) -> str:
         scope = self.scopes[-1]
         if flag == "v":
-            if value == ".":
-                return str(scope)
-            else:
-                values = value.split(".")
-                for v in values:
-                    if v in scope:
-                        scope = scope[v]
-                    else:
-                        return ""
-                return str(scope)
-        if flag == "p":
+            return get_string(scope, value)
+        elif flag == "p":
             # print(parse(scope[value]))
-            return self.render(parse(scope[value]))
-            # if value == ".":
-            #     return str(scope)
-            # else:
-            #     values = value.split(".")
-            #     for v in values:
-            #         if v in scope:
-            #             scope = scope[v]
-            #         else:
-            #             return ""
-            #     return str(scope)
+            return self.render(
+                parse(get_string(scope, value))
+            )
         elif flag == "!":
             output = ""
-            name, contents = value[0], value[1:]
-            if name in scope:
-                scope = scope[name]
-                if isinstance(scope, list):
-                    for s in scope:
-                        self.scopes.append(s)
-                        output += self.render(contents)
-                        self.scopes.pop()
-                else:
-                    self.scopes.append(scope)
+            key, contents = value[0], value[1:]
+            scope = get_scope(scope, key)
+            if isinstance(scope, list):
+                for s in scope:
+                    self.scopes.append(s)
                     output += self.render(contents)
                     self.scopes.pop()
+            elif scope is not None:
+                self.scopes.append(scope)
+                output += self.render(contents)
+                self.scopes.pop()
             return output
         else:  # flag == "?"
-            name, contents = value[0], value[1:]
-            values = name.split(".")
-            for v in values:
-                if v not in scope or not scope[v]:
-                    return self.render(contents)
-                else:
-                    scope = scope[v]
+            key, contents = value[0], value[1:]
+            scope = get_scope(scope, key)
+            if not scope:
+                return self.render(contents)
             return ""
 
     def render(self, template: list) -> str:
@@ -81,16 +62,20 @@ class Renderer(object):
         return output
 
 
-def render_file(path: str, data: dict):
-    with open(path + ".blt", encoding="utf-8") as file:
-        template = file.read()
-    with open(path + ".tex", mode="w", encoding="utf-8") as file:
-        file.write(render(template, data))
-
-
 def render(template: Union[str, list], data: dict) -> str:
     if isinstance(template, str):
         template = parse(template)
     return Renderer(data, [
         NumberPlugin(float_precision=2)
     ]).render(template)
+
+
+def render_file(path: str, data: Union[dict, str]):
+    if isinstance(data, str):
+        with open(data, encoding="utf-8") as file:
+            data = json.load(file)
+    path.replace(".blt", "")
+    with open(path + ".blt", encoding="utf-8") as file:
+        template = file.read()
+    with open(path + ".tex", mode="w", encoding="utf-8") as file:
+        file.write(render(template, data))
