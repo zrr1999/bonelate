@@ -12,8 +12,9 @@ Bonelate 是从 BoneTeX 模板块分离出来的项目，可以独立使用。
 
 ## 优势
 
-Bonelate 是参考 mustache 且针对 LaTeX 的语法微调了标记符，
-原本的`{{#partial}}`改为`{{!partial}}`，从而在不渲染的情况下 LaTeX 编译时也不会报错。
+Bonelate 针对 LaTeX 的语法设计了模板标记符，
+使用 LaTeX 中非特殊字符作为标记符，例如`{{!partial}}`中的`!`，
+从而在不解析渲染的情况下直接通过 LaTeX 引擎编译也不会报错。
 通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX 项目。
 
 ## 安装 [![Downloads](https://pepy.tech/badge/bonelate)](https://pepy.tech/project/bonelate)
@@ -69,13 +70,13 @@ print(render(test_string, {
 如果你的环境变量中有 python 脚本目录，你可以使用
 
 ```sh
-$ bonelate render ./examples/ml_work/bonework.tex ./examples/ml_work/data.json
+$ bonelate render ./examples/ml_work/bonework.blt ./examples/ml_work/data.json
 ```
 
 如果没有的话，你需要使用如下命令
 
 ```sh
-$ python bonelate render ./examples/ml_work/bonework.tex ./examples/ml_work/data.json
+$ python bonelate render ./examples/ml_work/bonework.blt ./examples/ml_work/data.json
 ```
 
 
