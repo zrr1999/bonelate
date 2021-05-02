@@ -38,24 +38,22 @@ $ pip install .
 
 ### 简单示例
 
+运行如下代码
 ```python
-from bonelate import render
+from bonelate import render, parse
 
-
-test_string = """
-        {{!persons}}{{name}} is awesome.{{/persons}}
-        {{person}} is beautiful.
-        {{!is_person}}{{.}} is a person.{{/is_person}}
-        """
+test_string = r"\LaTeX{} is a {{var}} typesetting system.{{!vars}}.{{/vars}}"
 print(render(test_string, {
-    "persons": [{"name": "Xiao Ming"}, {"name": "Yuan Long"}],
-    "person": "Xiao Ming",
-    "is_person": "Xiao Ming",
-    "not_person": False
+    "var": "high-quality",
+    "vars": list(range(10)),
 }))
-
-
 ```
+
+得到渲染结果
+```tex
+\LaTeX{} is a high-quality typesetting system...........
+```
+
 
 ### 命令行示例
 
