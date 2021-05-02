@@ -13,7 +13,7 @@ class TestBonelate(object):
 
     @staticmethod
     def _test_yaml(path: str):
-        with open(path) as file:
+        with open(path, encoding="utf-8") as file:
             tests = yaml.load(file, Loader=yaml.FullLoader)['tests']
         # for test in tests:
         #     context = test['data']

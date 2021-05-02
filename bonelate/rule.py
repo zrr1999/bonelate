@@ -7,6 +7,11 @@
 import pyparsing as pp
 from dataclasses import dataclass
 from typing import Callable, Union, Iterable
+FLAG_VARIABLE = "v"
+FLAG_PARTIAL = "p"
+FLAG_START_ = "!"
+FLAG_START = "?"
+FLAG_CLOSE = "/"
 
 
 @dataclass

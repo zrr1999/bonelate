@@ -15,6 +15,7 @@ test_string = [
         "{{?false}}{{false}}{{/false}}",
         "{{?persons}}empty{{/persons}}",  # empty
         "{{?undefined}}undefined {{person}}{{/undefined}}",
+        "Partial: {{>partial}}",
         """
         {{!persons}}{{name}} is awesome.{{/persons}}
         {{person}} is beautiful.
@@ -28,6 +29,7 @@ for t in test_string:
         "person": "Xiao Ming",
         "is_person": "Xiao Ming",
         "false": False,
-        "string": 3.4234
+        "string": 3.4234,
+        "partial": "{{partial}}"
     }))
 

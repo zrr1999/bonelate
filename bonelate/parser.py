@@ -27,7 +27,10 @@ CLOSE_TAG = DOUBLE_LBRACE + pp.Literal("/") + VARIABLE + DOUBLE_RBRACE
 literal = Rule("Others", pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]*}"), [
     lambda tokens: [["l", tokens[0]]]
 ])
-variable_tag = Rule("Tag", TAG)
+variable_tag = Rule("Variable", TAG)
+partial_tag = Rule("Partial", DOUBLE_LBRACE + pp.Literal(">").suppress() + VARIABLE + DOUBLE_RBRACE, [
+    lambda tokens: [["p", tokens[0]]]
+])
 token_list = Rule("TokenList", lambda parser: LBRACE + ((~pp.Suppress("{") + parser) | TAG) + RBRACE, [
     lambda tokens: [["l", "{"], *tokens, ["l", "}"]]
 ])
@@ -37,7 +40,7 @@ block = Rule("TokenList", lambda parser: OPEN_TAG + parser + CLOSE_TAG.suppress(
 
 
 class Parser(object):
-    rules = [block, token_list, variable_tag, literal]
+    rules = [block, token_list, partial_tag, variable_tag, literal]
 
     def __init__(self):
         self.tokenizer = pp.Forward().setName("Tokenizer")

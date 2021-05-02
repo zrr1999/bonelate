@@ -33,7 +33,20 @@ class Renderer(object):
                     else:
                         return ""
                 return str(scope)
-        elif flag == "#" or flag == "!":
+        if flag == "p":
+            # print(parse(scope[value]))
+            return self.render(parse(scope[value]))
+            # if value == ".":
+            #     return str(scope)
+            # else:
+            #     values = value.split(".")
+            #     for v in values:
+            #         if v in scope:
+            #             scope = scope[v]
+            #         else:
+            #             return ""
+            #     return str(scope)
+        elif flag == "!":
             output = ""
             name, contents = value[0], value[1:]
             if name in scope:
@@ -48,7 +61,7 @@ class Renderer(object):
                     output += self.render(contents)
                     self.scopes.pop()
             return output
-        else:  # flag == "!#"
+        else:  # flag == "?"
             name, contents = value[0], value[1:]
             values = name.split(".")
             for v in values:

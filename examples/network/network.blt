@@ -11,9 +11,9 @@
   \tikzstyle{output neuron}=[neuron, fill=blue!60!black, text=white];
 
   \inputlayer[count=8, bias=false, title=Input Layer, text=\xin]
+
   {{!layers}}
-  \hiddenlayer[count={{count}}, bias=false{{!title}}, title={{.}}{{/title}}]
-  \linklayers
+  \hiddenlayer[count={{count}}, bias=false{{!title}}, title={{.}}{{/title}}]\linklayers
   {{/layers}}
 
   \outputlayer[count=8, title=Output Layer, text=\xout]
