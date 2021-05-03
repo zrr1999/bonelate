@@ -23,7 +23,7 @@ OPTION = (pp.Suppress(":") + VARIABLE)[0, 1].addParseAction(
 TAG = (DOUBLE_LBRACE + VARIABLE + DOUBLE_RBRACE).addParseAction(
     lambda tokens: [["v", tokens[0]]]
 )
-OPEN_TAG = DOUBLE_LBRACE + pp.oneOf(["!", "?"]) + VARIABLE + OPTION + DOUBLE_RBRACE + pp.Literal("\n")[0, 1]
+OPEN_TAG = DOUBLE_LBRACE + pp.oneOf(["!", "?"]) + VARIABLE + OPTION + DOUBLE_RBRACE + pp.Suppress("\n")[0, 1]
 CLOSE_TAG = DOUBLE_LBRACE + pp.Literal("/") + VARIABLE + DOUBLE_RBRACE
 
 literal = Rule("Others", pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]*}"), [

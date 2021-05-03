@@ -7,8 +7,8 @@
 from bonelate import render, parse
 
 test_string = [
-    "{{!mat:&}}{{.}}{{/mat}}",
-    "{{!mat}}{{!.:&}} {{.}} {{/.}}\\\\\n{{/mat}}",
+    "{{!mat}}{{.}}{{/mat}}",
+    "{{!mat}}{{!.}} {{.}} {{/.}}\\\\\n{{/mat}}",
 ]
 for t in test_string:
     # print(parse(t))
