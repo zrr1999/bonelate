@@ -8,7 +8,7 @@ from bonelate.rule import Rule
 import pyparsing as pp
 
 WHITE = pp.Regex(r"\s*").suppress().setName("White")
-VARIABLE = pp.Regex(r"[-_.A-Za-z0-9\u4e00-\u9fa5]+")
+VARIABLE = pp.Regex(r"[.A-Za-z0-9-_&\u4e00-\u9fa5]+")
 LBRACE = pp.oneOf(["{", "<"]).suppress()
 RBRACE = pp.oneOf(["}", ">"]).suppress()
 
@@ -16,13 +16,15 @@ DOUBLE_LBRACE = LBRACE * 2 + WHITE
 DOUBLE_RBRACE = WHITE + RBRACE * 2
 TRIPLE_LBRACE = LBRACE * 3 + WHITE
 TRIPLE_RBRACE = WHITE + RBRACE * 3
+OPTION = (pp.Suppress(":") + VARIABLE)[0, 1].addParseAction(
+    lambda tokens: tokens or ""
+)
 
 TAG = (DOUBLE_LBRACE + VARIABLE + DOUBLE_RBRACE).addParseAction(
     lambda tokens: [["v", tokens[0]]]
 )
-OPEN_TAG = DOUBLE_LBRACE + pp.oneOf(["!", "?"]) + VARIABLE + DOUBLE_RBRACE
+OPEN_TAG = DOUBLE_LBRACE + pp.oneOf(["!", "?"]) + VARIABLE + OPTION + DOUBLE_RBRACE + pp.Literal("\n")[0, 1]
 CLOSE_TAG = DOUBLE_LBRACE + pp.Literal("/") + VARIABLE + DOUBLE_RBRACE
-
 
 literal = Rule("Others", pp.Regex(r"[^{}]+") | pp.Regex(r"[{][^{}]*}"), [
     lambda tokens: [["l", tokens[0]]]
@@ -35,7 +37,7 @@ token_list = Rule("TokenList", lambda parser: LBRACE + ((~pp.Suppress("{") + par
     lambda tokens: [["l", "{"], *tokens, ["l", "}"]]
 ])
 block = Rule("TokenList", lambda parser: OPEN_TAG + parser + CLOSE_TAG.suppress(), [
-    lambda tokens: [[tokens[0], tokens[1:]]]
+    lambda tokens: [[[tokens[0], tokens[2]], [tokens[1], *tokens[3:]]]]
 ])
 
 

@@ -31,20 +31,21 @@ class Renderer(object):
             return self.render(
                 parse(get_string(scope, value))
             )
-        elif flag == "!":
-            output = ""
+        elif flag[0] == "!":
             key, contents = value[0], value[1:]
+            # print(key)
             scope = get_scope(scope, key)
+            output = []
             if isinstance(scope, list):
                 for s in scope:
                     self.scopes.append(s)
-                    output += self.render(contents)
+                    output += [self.render(contents)]
                     self.scopes.pop()
             elif scope is not None:
                 self.scopes.append(scope)
-                output += self.render(contents)
+                output += [self.render(contents)]
                 self.scopes.pop()
-            return output
+            return flag[1].join(output)
         else:  # flag == "?"
             key, contents = value[0], value[1:]
             scope = get_scope(scope, key)
