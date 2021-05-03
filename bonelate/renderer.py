@@ -5,8 +5,8 @@
 # @File : renderer.py
 # @desc : 本代码未经授权禁止商用
 import json
-from bonelate.parser import parse
 from typing import Union, Iterable, Callable
+from bonelate.parser import parse
 from bonelate.plugins import NumberPlugin
 from bonelate.utils import get_scope, get_string
 
@@ -36,7 +36,7 @@ class Renderer(object):
             # print(key)
             scope = get_scope(scope, key)
             output = []
-            if isinstance(scope, list):
+            if isinstance(scope, Iterable):
                 for s in scope:
                     self.scopes.append(s)
                     output += [self.render(contents)]
