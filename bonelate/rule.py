@@ -12,6 +12,7 @@ FLAG_PARTIAL = "p"
 FLAG_START_ = "!"
 FLAG_START = "?"
 FLAG_CLOSE = "/"
+SCOPE_RULE = []
 
 
 @dataclass

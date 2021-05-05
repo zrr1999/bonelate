@@ -6,3 +6,4 @@
 # @desc : 本代码未经授权禁止商用
 from .plugin import Plugin
 from .number import NumberPlugin
+from .formula import SympyPlugin

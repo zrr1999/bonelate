@@ -38,7 +38,7 @@ setup(
     ],
     include_package_data=True,
     platforms="any",
-    install_requires=["pyparsing"],
+    install_requires=["pyparsing", "sympy"],
     extras_require=extras,
     entry_points={
         'console_scripts': [

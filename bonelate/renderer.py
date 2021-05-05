@@ -7,7 +7,7 @@
 import json
 from typing import Union, Iterable, Callable
 from bonelate.parser import parse
-from bonelate.plugins import NumberPlugin
+from bonelate.plugins import NumberPlugin, SympyPlugin
 from bonelate.utils import get_scope, get_string
 
 
@@ -67,7 +67,8 @@ def render(template: Union[str, list], data: dict) -> str:
     if isinstance(template, str):
         template = parse(template)
     return Renderer(data, [
-        NumberPlugin(float_precision=2)
+        NumberPlugin(float_precision=2),
+        SympyPlugin(),
     ]).render(template)
 
 
