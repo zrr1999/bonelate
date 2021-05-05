@@ -81,6 +81,13 @@ $ python bonelate render ./examples/ml_work/bonework.blt ./examples/ml_work/data
 
 
 ## 更新日志
+#### 0.1.1 (2021.5.5)
+1. 完善了README中的用法描述。
+2. 增加了分隔符特性，{{var:sep}}。
+3. 遍历渲染改为判断对象是否为Iterable。
+4. 添加了用于处理Sympy公式的插件。
+5. 修复部分bug。
+
 #### 0.1.0 (2021.5.2)
 1. 重构 tokenizer，现在命名为parser。
 2. 增加了 partial 语法。
