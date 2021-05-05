@@ -6,4 +6,4 @@
 # @desc : 本代码未经授权禁止商用
 from .renderer import render, render_file, Renderer
 from .parser import Parser, parse
-__version__ = "0.1.0"
+__version__ = "0.1.1"

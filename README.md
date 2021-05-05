@@ -6,16 +6,11 @@ Bonelate 是一个针对 LaTeX 的轻逻辑模版解析引擎，类似于 mustac
 与采取 mustache 的其他模版解析引擎相比（例如chevron或pymustache），
 Bonelate 针对 LaTeX 的语法做了很多优化，使 LaTeX 模板文件在不渲染的情况下也可使用 LaTeX 工具编译通过。
 
-## 背景
-
-Bonelate 是从 BoneTeX 模板块分离出来的项目，可以独立使用。
-
 ## 优势
 
 Bonelate 针对 LaTeX 的语法设计了模板标记符，
 使用 LaTeX 中非特殊字符作为标记符，例如`{{!partial}}`中的`!`，
 从而在不解析渲染的情况下直接通过 LaTeX 引擎编译也不会报错。
-通过 Bonelate，用户可以很方便的将现有 LaTeX 项目渐进地转换为 BoneTeX 项目。
 
 ## 安装 [![Downloads](https://pepy.tech/badge/bonelate)](https://pepy.tech/project/bonelate)
 
@@ -55,7 +50,7 @@ from bonelate import render, parse
 test_string = r"\LaTeX{} is a {{var}} typesetting system.{{!vars}}.{{/vars}}"
 print(render(test_string, {
     "var": "high-quality",
-    "vars": list(range(10)),
+    "vars": range(10),
 }))
 ```
 
