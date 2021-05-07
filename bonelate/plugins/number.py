@@ -10,15 +10,9 @@ from .plugin import Plugin
 class NumberPlugin(Plugin):
 
     def __init__(self, float_precision: int = 4):
+        super().__init__(float)
         self.precision = float_precision
 
-    def transform(self, data):
-        if isinstance(data, float):
-            data = format(data, f".{self.precision}f")
-        elif isinstance(data, dict):
-            for key, value in data.items():
-                data[key] = self.transform(value)
-        elif isinstance(data, list):
-            for index, d in enumerate(data):
-                data[index] = self.transform(d)
+    def transform(self, data: float) -> str:
+        data = format(data, f".{self.precision}f")
         return data

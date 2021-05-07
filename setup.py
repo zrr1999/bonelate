@@ -12,6 +12,7 @@ with open("README.md", "r", encoding='UTF-8') as fh:
 extras = {
     "test": ["pytest", "yaml"],
     "command": ["watchdog", "typer"],
+    "all": []
 }
 extras["all"] = reduce(lambda x, y: x + y, extras.values())
 
@@ -42,7 +43,7 @@ setup(
     extras_require=extras,
     entry_points={
         'console_scripts': [
-            'bonelate=bonelate:app',
+            'bonelate=bonelate.__main__:app',
         ]
     }
 )

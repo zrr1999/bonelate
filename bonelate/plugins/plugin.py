@@ -6,8 +6,19 @@
 # @desc : 本代码未经授权禁止商用
 class Plugin(object):
 
-    def __call__(self, data: dict) -> dict:
-        return self.transform(data)
+    def __init__(self, type):
+        self.type = type
 
-    def transform(self, data: dict) -> dict:
+    def __call__(self, data: dict) -> dict:
+        if isinstance(data, self.type):
+            data = self.transform(data)
+        elif isinstance(data, dict):
+            for key, value in data.items():
+                data[key] = self(value)
+        elif isinstance(data, list):
+            for index, d in enumerate(data):
+                data[index] = self(d)
+        return data
+
+    def transform(self, data) -> str:
         raise NotImplementedError

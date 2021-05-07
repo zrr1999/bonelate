@@ -9,13 +9,9 @@ from .plugin import Plugin
 
 
 class SympyPlugin(Plugin):
+    def __init__(self):
+        super().__init__(sp.Expr)
+
     def transform(self, data):
-        if isinstance(data, sp.Expr):
-            data = sp.latex(data)
-        elif isinstance(data, dict):
-            for key, value in data.items():
-                data[key] = self.transform(value)
-        elif isinstance(data, list):
-            for index, d in enumerate(data):
-                data[index] = self.transform(d)
+        data = sp.latex(data)
         return data
