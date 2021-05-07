@@ -62,6 +62,9 @@ class Renderer(object):
                 output += self.block_render(flag, value)
         return output
 
+    def use_plugin(self, plugin):
+        self.data = plugin(self.data)
+
 
 def render(template: Union[str, list], data: dict) -> str:
     if isinstance(template, str):
