@@ -74,8 +74,14 @@ $ bonelate render ./examples/ml_work
 $ python bonelate render ./examples/ml_work
 ```
 
-
 ## 更新日志
+
+#### 0.1.2 (2021.5.14)
+
+1. 优化了插件接口。
+2. 修复了无法解析嵌套模板的问题。
+3. 修改了render指令用法
+
 #### 0.1.1 (2021.5.5)
 1. 完善了README中的用法描述。
 2. 增加了分隔符特性，{{var:sep}}。
