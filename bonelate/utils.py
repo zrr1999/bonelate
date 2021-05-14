@@ -7,7 +7,7 @@
 def get_scope(scope, key: str):
     if key == ".":
         return scope
-    else:
+    elif isinstance(scope, dict):
         keys = key.split(".")
         for v in keys:
             if v in scope:

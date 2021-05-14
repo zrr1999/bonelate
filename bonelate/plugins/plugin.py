@@ -8,6 +8,7 @@ class Plugin(object):
 
     def __init__(self, type):
         self.type = type
+        self.data = None
 
     def __call__(self, data: dict) -> dict:
         if isinstance(data, self.type):

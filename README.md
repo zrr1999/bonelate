@@ -55,7 +55,7 @@ print(render(test_string, {
 ```
 
 得到渲染结果
-```tex
+```latex
 \LaTeX{} is a high-quality typesetting system...........
 ```
 
@@ -64,14 +64,14 @@ print(render(test_string, {
 
 如果你的环境变量中有 python 脚本目录，你可以使用
 
-```sh
-$ bonelate render ./examples/ml_work/bonework.blt ./examples/ml_work/data.json
+```shell
+$ bonelate render ./examples/ml_work
 ```
 
 如果没有的话，你需要使用如下命令
 
-```sh
-$ python bonelate render ./examples/ml_work/bonework.blt ./examples/ml_work/data.json
+```shell
+$ python bonelate render ./examples/ml_work
 ```
 
 

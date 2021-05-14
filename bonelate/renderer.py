@@ -36,15 +36,15 @@ class Renderer(object):
             # print(key)
             scope = get_scope(scope, key)
             output = []
-            if isinstance(scope, Iterable):
+            if isinstance(scope, dict):
+                self.scopes.append(scope)
+                output += [self.render(contents)]
+                self.scopes.pop()
+            elif isinstance(scope, Iterable):
                 for s in scope:
                     self.scopes.append(s)
                     output += [self.render(contents)]
                     self.scopes.pop()
-            elif scope is not None:
-                self.scopes.append(scope)
-                output += [self.render(contents)]
-                self.scopes.pop()
             return flag[1].join(output)
         else:  # flag == "?"
             key, contents = value[0], value[1:]

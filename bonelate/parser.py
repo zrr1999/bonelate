@@ -36,7 +36,7 @@ partial_tag = Rule("Partial", DOUBLE_LBRACE + pp.Literal(">").suppress() + VARIA
 token_list = Rule("TokenList", lambda parser: LBRACE + ((~pp.Suppress("{") + parser) | TAG) + RBRACE, [
     lambda tokens: [["l", "{"], *tokens, ["l", "}"]]
 ])
-block = Rule("TokenList", lambda parser: OPEN_TAG + parser + CLOSE_TAG.suppress(), [
+block = Rule("Block", lambda parser: OPEN_TAG + parser + CLOSE_TAG.suppress(), [
     lambda tokens: [[[tokens[0], tokens[2]], [tokens[1], *tokens[3:]]]]
 ])
 
