@@ -13,21 +13,20 @@ app = typer.Typer()
 
 
 @app.command()
-def render(source_path: str, data_path: str, target_path: str = None, yaml: bool = False):
+def render(source_dir: str, target_path: str = None, yaml: bool = False):
     if target_path is None:
-        (dir_path, name) = os.path.split(source_path)
-        target_path = f"{dir_path}/rendered_{name}"
+        target_path = f"{source_dir}/rendered.tex"
         print(target_path)
-    with open(data_path, encoding="utf-8") as file:
-        data = json.load(file)
-    with open(source_path, encoding="utf-8") as file:
+    with open(f"{source_dir}/template.tex", encoding="utf-8") as file:
         test_string = file.read()
+    with open(f"{source_dir}/data.json", encoding="utf-8") as file:
+        data = json.load(file)
     with open(target_path, mode="w", encoding="utf-8") as file:
         file.write(bonelate.render(test_string, data))
 
 
 @app.command()
-def keep():
+def watch():
     pass
 
 

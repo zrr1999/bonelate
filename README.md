@@ -18,13 +18,13 @@ Bonelate 针对 LaTeX 的语法设计了模板标记符，
 
 使用PyPI安装
 
-```sh
+```shell
 $ pip install bonelate[all]
 ```
 
 源码安装
 
-```sh
+```shell
 $ git clone git@gitee.com:zrr1999/bonelate.git
 $ cd bonelate
 $ pip install .
